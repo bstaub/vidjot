@@ -1,5 +1,5 @@
 const express = require('express');
-const exphbs  = require('express-handlebars');
+const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
@@ -25,16 +25,16 @@ app.set('view engine', 'handlebars');
 
 //Body parser middleware
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({extended: false}))
 // parse application/json
 app.use(bodyParser.json())
 
 
 // How middleware works
 //app.use(function(req, res, next){
-  //console.log(Date.now()); //log timestamp
-  //req.name = 'Bruno Staub'; //variable req.name in middleware hängen
-  //next(); //next middleware to run, wenn middleware aktiviert ist muss next() aktiviert sein!
+//console.log(Date.now()); //log timestamp
+//req.name = 'Bruno Staub'; //variable req.name in middleware hängen
+//next(); //next middleware to run, wenn middleware aktiviert ist muss next() aktiviert sein!
 //});
 
 // Index Route
@@ -58,9 +58,32 @@ app.get('/ideas/add', (req, res) => {
   res.render('ideas/add');
 });
 
+// Edit Idea Form
+app.get('/ideas/edit/:id', (req, res) => {
+  //res.render('ideas/edit');
+  Idea.findOne({
+    _id: req.params.id
+  })
+  .then(idea => {
+    res.render('ideas/edit', {
+      idea: idea
+    });
+  })
+
+});
+
 // Add Ideas List
 app.get('/ideas', (req, res) => {
-  res.send('daten erfolgreich in ideas eingetragen');
+  //res.send('daten erfolgreich in ideas eingetragen');
+  //res.render('ideas/index');
+  Idea.find({})  //all queries, also pass an empty object, it returns a promise..
+    .sort({date: 'desc'})
+    .then(ideas => {
+      res.render('ideas/index', {
+        ideas: ideas
+      });
+    });
+
 });
 
 // Process Form
@@ -71,21 +94,21 @@ app.post('/ideas', (req, res) => {
   //validation on server side (could also validate inputs on client side..)
   let errors = [];
 
-  if(!req.body.title){
+  if (!req.body.title) {
     errors.push({text: 'Bitte einen Titel hinzufügen'});
 
   }
-  if(!req.body.details){
+  if (!req.body.details) {
     errors.push({text: 'Bitte eine Beschreibung hinzufügen'});
   }
 
-  if(errors.length > 0){
+  if (errors.length > 0) {
     res.render('ideas/add', {
       errors: errors,
       title: req.body.title,
       details: req.body.details
     });
-  }else{
+  } else {
     //res.send('Daten erfolgreich eingetragen');
 
     const newIdea = {
