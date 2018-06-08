@@ -1,7 +1,19 @@
 const express = require('express');
 const exphbs  = require('express-handlebars');
+const mongoose = require('mongoose');
+
 
 const app = express();
+
+//Connect to mongoose Database(first local db, later mlab)
+//get a promise back, you can use also .then() with function or arrow syntax
+mongoose.connect('mongodb://localhost/vidjot-dev')
+  .then(() => console.log('MongoDB Connected ....'))
+  .catch(err => console.log(err));
+
+// Load Idea Model
+require('./models/Ideas');
+const Idea = mongoose.model('ideas');
 
 //Setup Express Handlebars Middleware
 app.engine('handlebars', exphbs({
@@ -30,6 +42,11 @@ app.get('/', (req, res) => {
 app.get('/about', (req, res) => {
   //res.send('ABOUT');
   res.render('about');
+});
+
+// Add Idea Form
+app.get('/ideas/add', (req, res) => {
+  res.render('ideas/add');
 });
 
 
