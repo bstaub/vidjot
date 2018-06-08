@@ -10,6 +10,15 @@ npm root -g  #zeige den Ort an wo globale Module installiert wurden
 npm i mongoose
 
 npm i body-parser
+
+mpm i method-override
+
+npm i connect-flash (old) 
+npm i express-flash
+
+npm i express-session
+
+
 ``````
 
 ### Middleware Example
@@ -32,5 +41,11 @@ https://www.npmjs.com/package/body-parser
 
 ### method override in form put -> (or do ajax put)
 https://www.npmjs.com/package/method-override
+
+### flash messages
+https://github.com/jaredhanson/connect-flash
+
+### express session
+https://www.npmjs.com/package/express-session
 
 

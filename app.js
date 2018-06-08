@@ -1,8 +1,10 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
+const methodOverride = require('method-override');
+const flash = require('connect-flash');
+const session = require('express-session');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
 
 
 const app = express();
@@ -33,6 +35,24 @@ app.use(bodyParser.json())
 //methodOverride Middleware, override using a query value
 // override with POST having ?_method=DELETE
 app.use(methodOverride('_method'))
+
+
+//Exress Session Middleware
+app.use(session({
+  secret: 'mysecret',
+  resave: true,
+  saveUninitialized: true,
+}))
+
+app.use(flash());
+
+// Global variables
+app.use(function(req, res, next){
+  res.locals.success_msg = req.flash('success_msg');   //sussess message put in variable and output in template
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');  //for later when we are using passport, ex. user not found..
+  next();
+});
 
 
 // How middleware works
@@ -124,6 +144,7 @@ app.post('/ideas', (req, res) => {
     new Idea(newIdea)
       .save()
       .then(idea => {
+        req.flash('success_msg', 'Video Idee wurde hinzugefügt');
         res.redirect('/ideas');
       })
   }
@@ -142,6 +163,7 @@ app.put('/ideas/:id', (req, res) => {   //wenn die daten modifiziert werden soll
 
       idea.save()
         .then(idea =>{
+          req.flash('success_msg', 'Video Idee wurde aktualisiert');
           res.redirect('/ideas');
         });
 
@@ -154,6 +176,7 @@ app.delete('/ideas/:id', (req, res) => {
     _id: req.params.id  //hole id von URL
   })
     .then(()=>{
+      req.flash('success_msg', 'Video Idee wurde entfernt');
       res.redirect('/ideas');
     });
 });
