@@ -58,6 +58,11 @@ app.get('/ideas/add', (req, res) => {
   res.render('ideas/add');
 });
 
+// Add Ideas List
+app.get('/ideas', (req, res) => {
+  res.send('daten erfolgreich in ideas eingetragen');
+});
+
 // Process Form
 app.post('/ideas', (req, res) => {
   //console.log(req.body);  //log form input in console, needs bodyParser with Middleware
@@ -81,7 +86,18 @@ app.post('/ideas', (req, res) => {
       details: req.body.details
     });
   }else{
-    res.send('Daten erfolgreich eingetragen');
+    //res.send('Daten erfolgreich eingetragen');
+
+    const newIdea = {
+      title: req.body.title,
+      details: req.body.details
+    }
+
+    new Idea(newIdea)
+      .save()
+      .then(idea => {
+        res.redirect('/ideas');
+      })
   }
 
 });
