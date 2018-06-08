@@ -8,6 +8,8 @@ npm root -g  #zeige den Ort an wo globale Module installiert wurden
 /Users/bstaub/.nvm/versions/node/v8.9.4/lib/node_modules
 
 npm i mongoose
+
+npm i body-parser
 ``````
 
 ### Middleware Example
@@ -23,4 +25,9 @@ http://getbootstrap.com/docs/4.1/getting-started/introduction/
 
 ### Install Mongoose
 http://mongoosejs.com/
+
+
+### body-parsser (get form fields)
+https://www.npmjs.com/package/body-parser
+
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const exphbs  = require('express-handlebars');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 
 const app = express();
@@ -15,11 +16,19 @@ mongoose.connect('mongodb://localhost/vidjot-dev')
 require('./models/Ideas');
 const Idea = mongoose.model('ideas');
 
-//Setup Express Handlebars Middleware
+//Express Handlebars Middleware
 app.engine('handlebars', exphbs({
   defaultLayout: 'main'
 }));
 app.set('view engine', 'handlebars');
+
+
+//Body parser middleware
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
+
 
 // How middleware works
 //app.use(function(req, res, next){
@@ -47,6 +56,34 @@ app.get('/about', (req, res) => {
 // Add Idea Form
 app.get('/ideas/add', (req, res) => {
   res.render('ideas/add');
+});
+
+// Process Form
+app.post('/ideas', (req, res) => {
+  //console.log(req.body);  //log form input in console, needs bodyParser with Middleware
+  //res.send('ok');
+
+  //validation on server side (could also validate inputs on client side..)
+  let errors = [];
+
+  if(!req.body.title){
+    errors.push({text: 'Bitte einen Titel hinzufügen'});
+
+  }
+  if(!req.body.details){
+    errors.push({text: 'Bitte eine Beschreibung hinzufügen'});
+  }
+
+  if(errors.length > 0){
+    res.render('ideas/add', {
+      errors: errors,
+      title: req.body.title,
+      details: req.body.details
+    });
+  }else{
+    res.send('Daten erfolgreich eingetragen');
+  }
+
 });
 
 
