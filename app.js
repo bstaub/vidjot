@@ -2,6 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 
 
 const app = express();
@@ -28,6 +29,10 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({extended: false}))
 // parse application/json
 app.use(bodyParser.json())
+
+//methodOverride Middleware, override using a query value
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'))
 
 
 // How middleware works
@@ -124,6 +129,35 @@ app.post('/ideas', (req, res) => {
   }
 
 });
+
+//Modify Put Input
+app.put('/ideas/:id', (req, res) => {   //wenn die daten modifiziert werden sollen (put method overriding)
+  //res.send('PUT');
+  Idea.findOne({
+    _id: req.params.id  //hole id von URL
+  })
+    .then(idea => {
+      idea.title = req.body.title;    //übergebe modifizierte werte
+      idea.details = req.body.details;
+
+      idea.save()
+        .then(idea =>{
+          res.redirect('/ideas');
+        });
+
+    })
+});
+
+app.delete('/ideas/:id', (req, res) => {
+  //res.send('DELETE');
+  Idea.remove({
+    _id: req.params.id  //hole id von URL
+  })
+    .then(()=>{
+      res.redirect('/ideas');
+    });
+});
+
 
 
 const port = 5000;

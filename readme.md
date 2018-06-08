@@ -30,4 +30,7 @@ http://mongoosejs.com/
 ### body-parsser (get form fields)
 https://www.npmjs.com/package/body-parser
 
+### method override in form put -> (or do ajax put)
+https://www.npmjs.com/package/method-override
+
 
