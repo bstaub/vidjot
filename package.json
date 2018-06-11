@@ -4,7 +4,9 @@
   "description": "App zum Video Ideen erstellen",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db": "mongod",
+    "dev": "nodemon"
   },
   "author": "Bruno Staub <bruno.staub@gmail.com>",
   "license": "MIT",
