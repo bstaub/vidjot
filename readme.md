@@ -48,4 +48,8 @@ https://github.com/jaredhanson/connect-flash
 ### express session
 https://www.npmjs.com/package/express-session
 
+### fake api
+https://jsonplaceholder.typicode.com/
+
+
 

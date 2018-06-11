@@ -78,6 +78,38 @@ app.get('/about', (req, res) => {
   res.render('about');
 });
 
+// Fetch-Demo mit Promise und Async Await
+app.get('/fetch', (req, res) => {
+  //res.send('ABOUT');
+
+  function testPromise(){
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(resp => resp.json())
+      .then(console.log)
+  }
+
+  async function fetchUsers(){
+    const resp = await fetch('https://jsonplaceholder.typicode.com/users')
+    const data = await resp.json();
+    console.log(data);
+  }
+
+  //fetchUsers();
+
+
+  //res.render('fetch');
+});
+
+
+// Fetch-Demo mit Promise und Async Await
+app.get('/promise', (req, res) => {
+  //res.send('Promise');
+  res.render('promise');
+
+
+});
+
+
 // Add Idea Form
 app.get('/ideas/add', (req, res) => {
   res.render('ideas/add');
@@ -113,7 +145,7 @@ app.get('/ideas', (req, res) => {
 
 // Process Form
 app.post('/ideas', (req, res) => {
-  //console.log(req.body);  //log form input in console, needs bodyParser with Middleware
+  console.log(req.body);  //log form input in console, needs bodyParser with Middleware
   //res.send('ok');
 
   //validation on server side (could also validate inputs on client side..)
@@ -141,10 +173,12 @@ app.post('/ideas', (req, res) => {
       details: req.body.details
     }
 
+
     new Idea(newIdea)
       .save()
-      .then(idea => {
-        req.flash('success_msg', 'Video Idee wurde hinzugefügt');
+      .then(idee => {
+        //console.log(idea);  //ist das objekt gemeint, wird aber eigentlich nicht weiter verwendet
+        req.flash('success_msg', 'Video '+idee.title+' Idee wurde hinzugefügt');
         res.redirect('/ideas');
       })
   }
